@@ -1,0 +1,29 @@
+### 用户详情
+POST http://localhost:8888/user/detail
+Content-Type: application/json
+
+{"identity": "52bb6d55-1954-4a6f-8da7-ae738b3aee42"}
+
+###
+### 注册
+POST http://localhost:8888/user/register
+Content-Type: application/json
+
+{"name": "zhang","password": "123456","email": "2568317193@qq.com","code": "736166"}
+
+###
+
+
+###  发送邮箱验证码
+POST http://localhost:8888/mail/code/send/register
+Content-Type: application/json
+
+{"email": "2568317193@qq.com"}
+
+### 登陆
+POST http://localhost:8888/user/login
+Content-Type: application/json
+
+{"name": "zhang","password": "123456"}
+
+###
