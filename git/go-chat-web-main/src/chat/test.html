@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebRTC Video Chat</title>
+</head>
+<body>
+  <video id="localVideo" autoplay></video>
+  <video id="remoteVideo" autoplay></video>
+
+  <script>
+    // 获取本地视频流
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(function(stream) {
+        var localVideo = document.getElementById('localVideo');
+        localVideo.srcObject = stream;
+
+        // 创建WebRTC PeerConnection
+        var pc = new RTCPeerConnection();
+
+        // 添加本地视频流到PeerConnection
+        stream.getTracks().forEach(function(track) {
+          pc.addTrack(track, stream);
+        });
+
+        // 处理远端视频流
+        pc.ontrack = function(event) {
+          var remoteVideo = document.getElementById('remoteVideo');
+          remoteVideo.srcObject = event.streams[0];
+        };
+
+        // 创建并发送offer SDP
+        pc.createOffer()
+          .then(function(offer) {
+            return pc.setLocalDescription(offer);
+          })
+          .then(function() {
+            // 将offer SDP发送给信令服务器（WebSocket）
+            var offerSdp = pc.localDescription.sdp;
+            sendOfferSdp(offerSdp);
+          })
+          .catch(function(error) {
+            console.log('Failed to create offer:', error);
+          });
+
+        // 处理接收到的answer SDP
+        function handleAnswerSdp(answerSdp) {
+          var answer = new RTCSessionDescription({ type: 'answer', sdp: answerSdp });
+          pc.setRemoteDescription(answer)
+            .catch(function(error) {
+              console.log('Failed to set remote description:', error);
+            });
+        }
+
+        // 处理ICE候选  在连接建立过程中进行网络地址和传输协议的协商。这样，WebRTC连接就能更好地适应不同的网络环境和网络配置
+        function handleIceCandidate(candidate) {
+          var iceCandidate = new RTCIceCandidate(candidate);
+          pc.addIceCandidate(iceCandidate)
+            .catch(function(error) {
+              console.log('Failed to add ICE candidate:', error);
+            });
+        }
+
+        // WebSocket连接和消息处理
+        var ws = new WebSocket('ws://localhost:8080/ws');
+        ws.onopen = function() {
+          console.log('WebSocket connected');
+        };
+        ws.onmessage = function(event) {
+          var message = JSON.parse(event.data);
+          if (message.type === 'answer') {
+            handleAnswerSdp(message.sdp);
+          } else if (message.type === 'iceCandidate') {
+            handleIceCandidate(message.candidate);
+          }
+        };
+
+        // 发送offer SDP
+        function sendOfferSdp(offerSdp) {
+          var message = { type: 'offer', sdp: offerSdp };
+          ws.send(JSON.stringify(message));
+        }
+      })
+      .catch(function(error) {
+        console.log('Failed to access media devices:', error);
+      });
+  </script>
+</body>
+</html>

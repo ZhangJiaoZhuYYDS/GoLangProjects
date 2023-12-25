@@ -1,0 +1,19 @@
+# 停止并删除容器
+docker stop canal
+docker rm canal
+
+#重新运行并指定
+docker run -p 11111:11111 --name canal \
+-e canal.destinations=test \
+-e canal.instance.master.address=mysql:3306  \
+-e canal.instance.dbUsername=canal  \
+-e canal.instance.dbPassword=canal  \
+-e canal.instance.connectionCharset=UTF-8 \
+-e canal.instance.tsdb.enable=true \
+-e canal.instance.gtidon=false  \
+-v /docker-software/canal/conf/canal.properties:/home/admin/canal-server/conf/canal.properties \
+-v /docker-software/canal/conf/instance.properties:/home/admin/canal-server/conf/test/instance.properties \
+--network mysql-test \
+--restart=always \
+-d canal/canal-server:v1.1.5
+

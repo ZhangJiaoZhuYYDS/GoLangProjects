@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package relation;
+option go_package = "./pb";
+
+message User{
+  int64 Id = 1;
+  string Name = 2;
+  int64 FollowCount = 3;
+  int64 FollowerCount = 4;
+  bool IsFollow = 5;
+  string Avatar = 6;
+  string BackgroundImage = 7;
+  string Signature = 8;
+  string TotalFavourited = 9;
+  int64 WorkCount = 10 ;
+  int64 FavouriteCount = 11;
+}
+message FriendUser{
+  int64 Id = 1;
+  string Name = 2;
+  int64 FollowCount = 3;
+  int64 FollowerCount = 4;
+  bool IsFollow = 5;
+  string Avatar = 6;
+  string BackgroundImage = 7;
+  string Signature = 8;
+  string TotalFavourited = 9;
+  int64 WorkCount = 10 ;
+  int64 FavouriteCount = 11;
+  string message = 12;
+  int64 msgType = 13;
+}
+message FollowSubject{
+  int64 Id = 1;
+  int64 UserId = 2;
+  int64 FollowerId = 3;
+  bool IsFollow = 4;
+
+}
+message AddFollowReq {
+  int64 UserId = 1;
+  int64 ToUserId = 2;
+}
+
+message AddFollowResp {
+  int64 StatusCode = 1;
+  string StatusMsg = 2;
+}
+message DeleteFollowReq {
+  int64 UserId = 1;
+  int64 ToUserId = 2;
+}
+
+message DeleteFollowResp {
+  int64 StatusCode = 1;
+  string StatusMsg = 2;
+}
+
+message CheckIsFollowReq{
+  int64 UserId = 1;
+  int64 ToUserId = 2;
+}
+
+message CheckIsFollowResp{
+  int64 StatusCode = 1;
+  string StatusMsg = 2;
+  bool IsFollow = 3;
+}
+message GetFollowListReq {
+  int64 Userid = 1;
+  int64 CurrentId = 2;
+}
+
+message GetFollowListResp {
+  int64 StatusCode = 1;
+  string StatusMsg = 2;
+  repeated User UserList = 3;
+}
+message GetFollowerReq {
+  int64 Userid = 1;
+  int64 CurrentId = 2;
+}
+
+message GetFollowerResp {
+  int64 StatusCode = 1;
+  string StatusMsg = 2;
+  repeated User UserList = 3;
+}
+message GetFollowerCountReq{
+  int64 Userid = 1;
+}
+
+message GetFollowerCountResp{
+  int64 StatusCode = 1;
+  string StatusMsg = 2;
+  int64 Count = 3;
+}
+
+message GetFriendListReq {
+  int64 Userid = 1;
+  int64 CurrentId = 2;
+}
+
+message GetFriendListResp {
+  int64 StatusCode = 1;
+  string StatusMsg = 2;
+  repeated FriendUser UserList = 3;
+}
+
+message GetFollowCountReq{
+  int64 Userid = 1;
+}
+
+message GetFollowCountResp{
+  int64 StatusCode = 1;
+  string StatusMsg = 2;
+  int64 Count = 3;
+}
+
+message GetFriendCountReq{
+  int64 Userid = 1;
+}
+
+message GetFriendCountResp{
+  int64 StatusCode = 1;
+  string StatusMsg = 2;
+  int64 Count = 3;
+}
+
+service RelationRpc {
+  rpc AddFollow(AddFollowReq) returns (AddFollowResp);
+  rpc DeleteFollow(DeleteFollowReq)returns(DeleteFollowResp);
+  rpc GetFollowList(GetFollowListReq)returns(GetFollowListResp);
+  rpc GetFollowerList(GetFollowerReq)returns(GetFollowerResp);
+  rpc GetFriendList(GetFriendListReq)returns(GetFriendListResp);
+  rpc GetFollowerCount(GetFollowerCountReq)returns(GetFollowerCountResp);
+  rpc GetFollowCount(GetFollowCountReq)returns(GetFollowCountResp);
+  rpc GetFriendCount(GetFriendCountReq)returns(GetFriendCountResp);
+  rpc CheckIsFollow(CheckIsFollowReq)returns(CheckIsFollowResp);
+
+}

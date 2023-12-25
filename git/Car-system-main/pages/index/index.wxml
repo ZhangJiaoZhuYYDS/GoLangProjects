@@ -1,0 +1,12 @@
+<!--pages/index/index.wxml-->
+<view class="header">车辆联络平台</view>
+<!-- 轮播图 -->
+<searchbar></searchbar>
+<chargeCard></chargeCard>
+<inCharge></inCharge>
+<!-- <navBar></navBar> -->
+<!-- <popup></popup> -->
+<!-- <prompt></prompt> -->
+
+
+

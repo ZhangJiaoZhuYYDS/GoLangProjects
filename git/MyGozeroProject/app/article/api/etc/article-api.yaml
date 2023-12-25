@@ -1,0 +1,20 @@
+Name: applet-api
+Host: 0.0.0.0
+Port: 9090
+Auth:
+  AccessSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  AccessExpire: 604800
+  RefreshSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  RefreshExpire: 2592000
+  RefreshAfter: 604800
+Oss:
+  Endpoint: https://oss-cn-beijing.aliyuncs.com
+  AccessKeyId: LTAI5tSk3oEZqinKhFWHx9ym
+  AccessKeySecret: 4Pznq6IvLtcHzP3X6WtZdYArIqDpAa
+  BucketName: go-zero-project
+ArticleRPC:
+  Etcd:
+    Hosts:
+      - 192.168.31.5:2379
+    Key: article.rpc
+  NonBlock: true

@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package favor;
+
+option go_package = "./favor";
+
+
+
+service FavorRpc{
+  rpc DisFavor(DisFavorReq) returns (DisFavorResp); // 取消点赞
+  rpc Favor(FavorReq) returns (FavorResp); // 点赞
+  rpc FavorList(FavorListReq) returns(FavorListResp);  //点赞列表
+  rpc FavorNum(FavorNumReq) returns (FavorNumResp); //点赞数目
+  rpc IsFavor(IsFavorReq) returns (IsFavorResp); //当前用户是否点赞该视频
+  rpc FavorNumOfUser(FavorNumOfUserReq) returns (FavorNumOfUserResp); // 用户的点赞数
+  rpc FavoredNumOfUser(FavoredNumOfUserReq) returns (FavoredNumOfUserResp); // 用户的获赞数
+}
+
+
+//
+message FavorReq{
+  int64 Userid = 1;
+  int64 VideoId = 2;
+}
+message FavorResp{}
+
+//
+message DisFavorReq{
+  int64 Userid = 1;
+  int64 VideoId = 2;
+}
+message DisFavorResp{}
+
+//
+message FavorListReq{
+  int64 Userid = 1;
+}
+
+message FavorListResp{
+  repeated video Videos = 1;
+}
+
+message video {
+  int64 id = 1;
+  user author = 2;
+  string title = 3;
+  string play_url = 4;
+  string cover_url = 5;
+  string create_time = 6;
+  string update_time = 7;
+  string video_sha256=8;
+}
+
+message user {
+  int64 id = 1;
+  string name = 2;
+  string avatar = 6;
+  string background_image = 7;
+  string signature = 8;
+  bool is_follow = 9;
+  int64 follow_count = 10;
+  int64 follower_count = 11;
+  string total_favorited = 12;
+  int64 work_count = 13;
+  int64 favorite_count = 14;
+}
+
+
+//
+message FavorNumReq{
+  int64  VideoId = 1;
+}
+message FavorNumResp{
+  int64 Num = 1;
+}
+//
+
+message IsFavorReq{
+  int64 UserId = 1;
+  int64 VideoId = 2;
+}
+
+message IsFavorResp{
+  bool IsFavor = 1;
+}
+
+//
+
+message FavorNumOfUserReq{
+  int64 UserId = 1;
+}
+
+message FavorNumOfUserResp{
+  int64 FavorNumOfUser = 1 ;
+}
+
+//
+
+message FavoredNumOfUserReq{
+  int64 UserId = 1;
+}
+
+message FavoredNumOfUserResp{
+  int64 FavoredNumOfUser = 1 ;
+}
+
+
+
+
+
+

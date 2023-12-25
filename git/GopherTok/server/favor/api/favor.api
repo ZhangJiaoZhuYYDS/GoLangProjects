@@ -1,0 +1,80 @@
+syntax = "v1"
+
+// 接口信息
+info(
+	title: "GopherTok/favor.api"
+	author: "saleroa"
+	version: "1.0.0"
+)
+
+type BaseResponse {
+	Code    int64  `json:"status_code"`
+	Message string `json:"status_msg,omitempty"`
+}
+
+type (
+	// Favor
+	FavorReq {
+		Video_id    int64  `form:"video_id"`
+		Action_type int64  `form:"action_type"`
+		Token       string `form:"token"`
+	}
+
+	FavorResp {
+		BaseResponse
+	}
+
+	// Favorlist
+	FavorlistReq {
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+	FavorlistResp {
+		BaseResponse
+		Videos []video `json:"video_list"`
+	}
+	author {
+		ID              int64  `json:"id"`
+		Name            string `json:"name"`
+		FollowCount     int64  `json:"follow_count"`
+		FollowerCount   int64  `json:"follower_count"`
+		IsFollow        bool   `json:"is_follow"`
+		Avatar          string `json:"avatar"`
+		BackgroundImage string `json:"background_image"`
+		Signature       string `json:"signature"`
+		TotalFavorited  string `json:"total_favorited"`
+		WorkCount       int64  `json:"work_count"`
+		FavoriteCount   int64  `json:"favorite_count"`
+	}
+
+	video {
+		ID            int64  `json:"id"`
+		Author        author `json:"author"`
+		PlayURL       string `json:"play_url"`
+		CoverURL      string `json:"cover_url"`
+		FavoriteCount int64  `json:"favorite_count"`
+		CommentCount  int64  `json:"comment_count"`
+		IsFavorite    bool   `json:"is_favorite"`
+		Title         string `json:"title"`
+	}
+)
+
+@server(
+	prefix: douyin/favorite
+	middleware: JWT // 路由中间件声明
+)
+
+service favor {
+	@doc(
+		summary:  "点赞/取消点赞"
+	)
+	@handler Favor
+	post /action (FavorReq) returns (FavorResp)
+	
+	@doc(
+		summary: "点赞列表"
+	)
+	@handler FavorList
+	get /list (FavorlistReq) returns (FavorlistResp)
+	
+}
